@@ -1,0 +1,71 @@
+.header
+{
+  margin-top: 5rem;
+  /*
+  margin-bottom: 5rem;
+  */
+}
+
+.header h1
+{
+  margin-bottom: 5rem;
+}
+
+body
+{
+  min-height: 50rem;
+}
+
+
+/*
+  Error Color
+*/
+.bg-3
+{
+  background-color: red;
+}
+.bg-2
+{
+  background-color: yellow;
+}
+.bg-1
+{
+  background-color: grey;
+}
+.bg-0
+{
+  background-color: white;
+}
+
+.text-3
+{
+  color: red;
+}
+.text-2
+{
+  color: yellow;
+}
+.text-1
+{
+  color: gray;
+}
+.text-0
+{
+  color: green;
+}
+
+
+
+.blink {
+  animation: blinker 1.5s linear infinite;
+  color: red !important;
+  /*
+  color: #1c87c9;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: sans-serif;
+  */
+  }
+  @keyframes blinker {  
+  50% { opacity: 0; }
+  }

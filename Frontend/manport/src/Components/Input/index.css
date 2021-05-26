@@ -1,0 +1,28 @@
+
+
+.input
+{
+    padding: 6px 10px;
+    background-color: white;
+    width: 100%;
+    margin-left: 1rem;
+    box-sizing: border-box;
+}
+
+.disabled
+{
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    color: white !important;
+}
+
+.input-col {
+  float: left;
+  height: 100%;
+}
+
+.input-box {
+  float: none;
+  overflow: hidden;
+}

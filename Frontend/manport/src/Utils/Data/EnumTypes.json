@@ -1,0 +1,14 @@
+{
+    "backend": 
+    ["Other","Pure_Java","JSP","PL_SQL","Spring","SpringBoot"],
+    "frontend":
+    ["No_UI","Other","Pure_HTML_CSS_JS","JSP","Apache_Wicket","BackboneJs","ReactJs"],
+    "database": 
+    ["Other","Oracle","MSSQL","DB2"],
+    "businessArea":
+    ["Other","MANUFACTURING","Quality","Both"],
+    "responsibleTeam":
+    ["Other","Manufacturing_Systems","EMC_Quality"],
+    "errorTypes":
+    ["NONE","LOW","MEDIUM","HIGH"]
+}
