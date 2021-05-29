@@ -1,21 +1,19 @@
 package com.manportq.manport;
 
-import com.manportq.manport.DTO.ApplicationDTO;
-import com.manportq.manport.DTO.CountryDTO;
-import com.manportq.manport.DTO.ProdDTO;
 import com.manportq.manport.Model.*;
+import com.manportq.manport.Model.Builders.LinkGroupBuilder;
 import com.manportq.manport.Model.types.*;
 import com.manportq.manport.Repository.*;
 import com.manportq.manport.Servies.CountryService;
+import com.manportq.manport.Repository.LinkRepository;
 import com.manportq.manport.Servies.ProdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @SpringBootApplication
@@ -29,7 +27,8 @@ public class ManportApplication implements CommandLineRunner
 	private final IssueRepository issueRepository;
 	private final ApplicationRepository applicationRepository;
 	private final ProdService prodService;
-	private final SectionRepository sectionRepository;
+	private final LinkRepository linkRepository;
+	private final LinkGroupRepository linkGroupRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ManportApplication.class, args);
@@ -76,6 +75,7 @@ public class ManportApplication implements CommandLineRunner
 				.responsible("Emir Demirtaş")
 				.backend(BackEndTypes.Spring)
 				.frontEnd(FrontEndTypes.Other)
+				.links(Arrays.asList(new Link("Wiki", "wiki/tw", "google.com.tr")))
 				.isTracking(true)
 				.responsibleTeam(ResponsibleTeamTypes.EMC_Quality)
 				.build()
@@ -90,7 +90,6 @@ public class ManportApplication implements CommandLineRunner
 		Country t2 = countryRepository.save(new Country(true, true, fr.getId(), twitter));
 		Country t3 = countryRepository.save(new Country(true, true, en.getId(), twitter));
 
-
 		Prod prod1 = prodRepository.save(new Prod("Prod1", f1));
 		Prod prod2 = prodRepository.save(new Prod("Prod2", f1));
 		Prod prod3 = prodRepository.save(new Prod("Prod1", f2));
@@ -102,7 +101,7 @@ public class ManportApplication implements CommandLineRunner
 
 		Job job1 = jobRepository.save(new Job(ErrorType.LOW, "Job1", prod1));
 		Job job2 = jobRepository.save(new Job(ErrorType.HIGH, "Job2", prod1));
-			Job job3 = jobRepository.save(new Job(ErrorType.MEDIUM, "Job3", prod1));
+		Job job3 = jobRepository.save(new Job(ErrorType.MEDIUM, "Job3", prod1));
 		Job job7= jobRepository.save(new Job(ErrorType.MEDIUM, "Job4", prod1));
 		Job job8 = jobRepository.save(new Job(ErrorType.MEDIUM, "Job1", prod1));
 
@@ -110,55 +109,22 @@ public class ManportApplication implements CommandLineRunner
 		Job job5 = jobRepository.save(new Job(ErrorType.MEDIUM, "Job2", prod2));
 		Job job6 = jobRepository.save(new Job(ErrorType.LOW, "Job3", prod2));
 
+		/* Link Groups */
+
+		LinkGroup tr1 = new LinkGroupBuilder()
+				.setCountry(f1)
+				.setLinks(Arrays.asList(new Link("ASD","ASD","ASD")))
+				.createLinkGroup();
+
+		linkGroupRepository.save(tr1);
+
 		/* Issues */
 		issueRepository.save(new Issue(facebook.getId(), f1.getId(), prod1.getId(), job1.getId(), "Fotoğraf beğenirken oluşan hatalr için", ErrorType.LOW));
 
 		/* App Tests */
 
-		Long appId = 6L;
-		Optional<Application> appDB = applicationRepository.findById(appId);
 
-		CountryDTO c = countryService.save(new CountryDTO(null, false, false, 123L, new ArrayList<>()), appDB.get());
-
-		// ok
-		//countryService.delete(c.getId());
-
-		ProdDTO prod = prodService.save(new ProdDTO(null, "prod-deneme", new ArrayList<>()), c);
-
-		Optional<Prod> p1 = prodRepository.findById(prod.getId());
-
-		//	prodRepository.deleteById(p1.get().getId());
-
-		// not ok -> boş entity de çalışıyor sadece
-		countryService.delete(c.getId());
-
-		/*
-			Prodslar el ile mi eklenecek yoksa otamatik bir yolla mı eklenecek
-
-	 	*/
-
-		/*
-			Sections
-	 	*/
-		Section s1 = new Section();
-		s1.setTitle("Facebook");
-
-		Section s2 = new Section();
-		s2.setTitle("Production");
-
-		Section s3 = new Section();
-		s3.setTitle("Turkey");
-
-		Section s4 = new Section();
-		s4.setTitle("France");
-
-		s1.getSubSections().add(s2);
-		s1.getSubSections().add(s3);
-		//s1.getSubSections().add(s4);
-
-		sectionRepository.save(s1);
-		//sectionRepository.save(s2);
-		//sectionRepository.save(s3);
-		//sectionRepository.save(s4);
+		facebook.getLinks().add(new Link("Jira", "jira/fb", "google.com.tr"));
+		applicationRepository.save(facebook);
 	}
 }

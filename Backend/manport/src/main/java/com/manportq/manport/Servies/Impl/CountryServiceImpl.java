@@ -2,7 +2,6 @@ package com.manportq.manport.Servies.Impl;
 
 
 import com.manportq.manport.Model.Messages.CountryMessage;
-import com.manportq.manport.Model.Messages.PlantMessage;
 import com.manportq.manport.Model.Prod;
 import com.manportq.manport.Model.types.MessageTypes;
 import com.manportq.manport.Repository.ProdRepository;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +58,8 @@ public class CountryServiceImpl implements CountryService
             countryDTO.setId(countryDB.getId());
             return countryRepository.save(
                     countryDTO.
-                            convertToCountry(countryDB.getApplication()))
+                            //convertToCountry(countryDB.getApplication()))
+                            convertToCountry(null))
                             .convertDTO();
         }
 

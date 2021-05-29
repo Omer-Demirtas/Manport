@@ -56,10 +56,16 @@ public class Application
 
         fetch: her application istendiğinde countryler getirilsimn mi ?
     */
-
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "application", fetch = FetchType.LAZY)
     private List<Country> countries = new ArrayList<>();
+
+
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="APPLICATION_LINK", joinColumns={@JoinColumn(name="APPLICATION_ID", referencedColumnName="ID")}
+            , inverseJoinColumns={@JoinColumn(name="LINK_ID", referencedColumnName="ID")})
+    private List<Link> links = new ArrayList<>();
+
 
 
     public static class Builder
@@ -80,6 +86,7 @@ public class Application
         private ResponsibleTeamTypes responsibleTeam;
         private BackEndTypes backend;
         private FrontEndTypes frontend;
+        private List<Link> links = new ArrayList<>();
         private List<Country> countries = new ArrayList<>();
 
         public Builder id(Long id) {
@@ -152,7 +159,13 @@ public class Application
             return this;
         }
 
-        public Builder countries(List<CountryDTO> countryDTOS) {
+        public Builder links(List<Link> links) {
+            this.links = links;
+            return this;
+        }
+
+        public Builder countries(List<Country> countries) {
+            this.countries = countries;
             return this;
         }
 
@@ -177,6 +190,8 @@ public class Application
         this.isStopProduction = builder.isStopProduction;
         this.lineCountOfBackend = builder.lineCountOfBackend;
         this.lineCountOfFrontend = builder.lineCountOfFrontend;
+        this.countries = builder.countries;
+        this.links = builder.links;
     }
 
     @Override
@@ -203,23 +218,24 @@ public class Application
         countries.forEach(country -> countryDTOS.add(country.convertDTO()));
 
         return
-                new ApplicationDTO(
-                        id,
-                        fullName,
-                        shortCode,
-                        responsible,
-                        lineCountOfBackend,
-                        lineCountOfFrontend,
-                        releaseDate,
-                        isTracking,
-                        isStopProduction,
-                        businessArea,
-                        database,
-                        responsibleTeam,
-                        backend,
-                        frontend,
-                        countryDTOS
-                );
+                new ApplicationDTO.Builder()
+                .businessArea(businessArea)
+                .countries(countryDTOS)
+                .frontEnd(frontend)
+                .backend(backend)
+                .database(database)
+                .isTracking(isTracking)
+                .isStopProduction(isStopProduction)
+                .lineCountOfFrontend(lineCountOfFrontend)
+                .lineCountOfBackend(lineCountOfBackend)
+                .releaseDate(releaseDate)
+                .id(id)
+                .links(links)
+                .fullName(fullName)
+                .shortCode(shortCode)
+                .responsible(responsible)
+                .responsibleTeam(responsibleTeam)
+                .build();
     }
 
     public void updateWithDTO(ApplicationDTO application)

@@ -37,7 +37,6 @@ public class Country
     private Boolean isDeleted = false;
     private Long plantId;
 
-
     @JsonBackReference
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name="application_id")
@@ -45,8 +44,13 @@ public class Country
 
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "country", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
     private List<Prod> prods = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+    private List<LinkGroup> links = new ArrayList<>();
+
 
     public CountryDTO convertDTO()
     {
@@ -75,6 +79,7 @@ public class Country
         private Boolean isTracking;
         private Long plantId;
         private List<Prod> prods = new ArrayList<>();
+        private List<LinkGroup> links = new ArrayList<>();
         private Application application;
 
         public Builder id(Long id) {
@@ -103,6 +108,11 @@ public class Country
 
         public Builder prods(List<Prod> prods) {
             this.prods = prods;
+            return this;
+        }
+
+        public Builder links(List<LinkGroup> links) {
+            this.links = links;
             return this;
         }
 
